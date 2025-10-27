@@ -1,7 +1,6 @@
 package com.example;
 
-import com.example.model.Graph;
-import com.example.model.Graphs;
+import com.example.DTO.InputDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -15,10 +14,8 @@ public class Main {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        Graphs graphs = mapper.readValue(input, Graphs.class);
+        InputDTO graphs = mapper.readValue(input, InputDTO.class);
 
-        Graph graph = graphs.getGraphs().getFirst();
-
-        System.out.println(mapper.writer().writeValueAsString(graph));
+        System.out.println(mapper.writer().writeValueAsString(graphs));
     }
 }
