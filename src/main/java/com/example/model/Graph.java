@@ -3,12 +3,16 @@ package com.example.model;
 import java.util.*;
 
 public class Graph {
-    int V;  // Number of vertices
-    List<Edge> edges;  // List of all edges
+    private int V;  // Number of vertices
+    private List<Edge> edges;  // List of all edges
+    private List<List<Pair>> adj; // Adjacency list for Prim's algorithm
 
     public Graph(int V) {
         this.V = V;
         this.edges = new ArrayList<>();
+        this.adj = new ArrayList<>(V);
+        for (int i = 0; i < V; i++)
+            adj.add(new ArrayList<>());
     }
 
     /**
@@ -48,7 +52,7 @@ public class Graph {
 
     /**
      * Kruskal's algorithm.
-     * @return MST
+     * @return MST.
      */
     public List<Edge> kruskalMST() {
         Collections.sort(edges);
@@ -69,6 +73,50 @@ public class Graph {
 
             if (result.size() == V - 1)
                 break;
+        }
+
+        return result;
+    }
+
+    /**
+     * Prim's algorithm.
+     * @return MST.
+     */
+    public List<Edge> primsMST() {
+        boolean[] inMST = new boolean[V];
+        int[] key = new int[V];
+        int[] parent = new int[V];
+        Arrays.fill(key, Integer.MAX_VALUE);
+        Arrays.fill(parent, -1);
+
+        // Min-heap based on edge weight
+        PriorityQueue<Pair> pq = new PriorityQueue<>(Comparator.comparingInt(Pair::getWt));
+
+        // Start from vertex 0
+        key[0] = 0;
+        pq.add(new Pair(0, 0));
+
+        while (!pq.isEmpty()) {
+            int u = pq.poll().getV();
+            if (inMST[u])
+                continue;
+            inMST[u] = true;
+
+            for (Pair neighbor : adj.get(u)) {
+                int v = neighbor.getV();
+                int weight = neighbor.getWt();
+
+                if (!inMST[v] && weight < key[v]) {
+                    key[v] = weight;
+                    pq.add(new Pair(v, key[v]));
+                    parent[v] = u;
+                }
+            }
+        }
+
+        List<Edge> result = new ArrayList<>();
+        for (int i = 1; i < V; i++) {
+            result.add(new Edge(parent[i], i, key[i]));
         }
 
         return result;
