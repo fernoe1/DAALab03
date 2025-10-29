@@ -25,6 +25,14 @@ public class Edge implements Comparable<Edge> {
         return dest;
     }
 
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
     /**
      * Compare two edges based on weight.
      * @param compareEdge the object to be compared.
@@ -34,5 +42,10 @@ public class Edge implements Comparable<Edge> {
     @Override
     public int compareTo(Edge compareEdge) {
         return this.weight - compareEdge.weight;
+    }
+
+    @Override
+    public String toString() {
+        return src + " - " + dest + " (" + weight + ")";
     }
 }
